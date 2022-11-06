@@ -53,6 +53,10 @@ namespace MediatoRSourceGenerator
             }
 
 
+            ListOfParameters = "";
+            ListOfProperties = "";
+            ListOfPropertiesEqualsTheParameters = "";
+
             GenerateAddCommand(
                 AppsettingDataModel,
                 TheNameSpace: "CM.Library.Events.Country",
@@ -66,6 +70,42 @@ namespace MediatoRSourceGenerator
                 "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country"
                 );
 
+
+
+            ListOfParameters = "";
+            ListOfProperties = "";
+            ListOfPropertiesEqualsTheParameters = "";
+
+            GenerateUpdateCommand(
+            AppsettingDataModel,
+            TheNameSpace: "CM.Library.Events.Country",
+            DataModelName: "Country",
+            DataModelNamespace: "CM.Library.DataModels.MetaData;",
+            DataModelClass: "CountryDataModel",
+            ListOfProperties: ref ListOfProperties,
+            ClaimsPrincipalIfTrue: true,
+            ListOfParameters: ref ListOfParameters,
+            ListOfPropertiesEqualsTheParameters: ref ListOfPropertiesEqualsTheParameters,
+            "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country"
+            );
+
+            ListOfParameters = "";
+            ListOfProperties = "";
+            ListOfPropertiesEqualsTheParameters = "";
+
+            GenerateDeleteCommand(
+            AppsettingDataModel,
+            TheNameSpace: "CM.Library.Events.Country",
+            DataModelName: "Country",
+            DataModelNamespace: "CM.Library.DataModels.MetaData;",
+            DataModelClass: "CountryDataModel",
+            ListOfProperties: ref ListOfProperties,
+            ClaimsPrincipalIfTrue: true,
+            ListOfParameters: ref ListOfParameters,
+            ListOfPropertiesEqualsTheParameters: ref ListOfPropertiesEqualsTheParameters,
+            "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country"
+            );
+
         }
 
 
@@ -76,12 +116,12 @@ namespace MediatoRSourceGenerator
         }
 
 
-        public static void updateListOfParameters(CM.Library.DataModels.MetaData.CountryDataModel countryDataModel, PropertyInfo property, PropertyInfo descricao, string typeName)
+        public static void updateListOfParameters(CM.Library.DataModels.MetaData.CountryDataModel countryDataModel, PropertyInfo property, string descricaoName, string typeName,bool skipCommaAtTheBegin = false)
         {
-            string destinationWord = descricao.Name;
+            string destinationWord = descricaoName;
             destinationWord = string.Concat(destinationWord[0].ToString().ToLower(), destinationWord.AsSpan(1));
 
-            if (property == countryDataModel.GetType().GetProperties().First<PropertyInfo>())
+            if (property == countryDataModel.GetType().GetProperties().First<PropertyInfo>() || skipCommaAtTheBegin)
             {
                 ListOfParameters += $"{typeName} {destinationWord}";
             }
@@ -91,12 +131,12 @@ namespace MediatoRSourceGenerator
             }
         }
 
-        public  static void updateListOfPropertiesEqualsTheParameters(PropertyInfo descricao)
+        public  static void updateListOfPropertiesEqualsTheParameters(string descricaoName)
         {
-            string destinationWord = descricao.Name;
+            string destinationWord = descricaoName;
             destinationWord = string.Concat(destinationWord[0].ToString().ToLower(), destinationWord.AsSpan(1));
 
-            ListOfPropertiesEqualsTheParameters += $" this.{descricao.Name} = {destinationWord}; \n ";
+            ListOfPropertiesEqualsTheParameters += $" this.{descricaoName} = {destinationWord}; \n ";
         }
 
 
@@ -109,6 +149,8 @@ namespace MediatoRSourceGenerator
         {
 
             CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
+
+            bool skipCommaAtTheBegin = true;
 
             foreach (var property in countryDataModel.GetType().GetProperties())
             {
@@ -157,16 +199,21 @@ namespace MediatoRSourceGenerator
                 }
                 else
                 {
-                    break;
+                    continue;
                 }
-                if (descricao.Name.Contains("Deleted"))
+                if (descricao.Name.Equals("Deleted"))
                 {
-                    break;
+                    continue;
+                }
+                if (descricao.Name.Equals("Id"))
+                {
+                    continue;
                 }
 
                 updateListOfProperties(typeName, descricao.Name);
-                updateListOfParameters(countryDataModel, property, descricao, typeName);
-                updateListOfPropertiesEqualsTheParameters(descricao);
+                updateListOfParameters(countryDataModel, property, descricao.Name, typeName, skipCommaAtTheBegin: skipCommaAtTheBegin);
+                skipCommaAtTheBegin = false;
+                updateListOfPropertiesEqualsTheParameters(descricao.Name);
 
             }
 
@@ -206,6 +253,233 @@ namespace MediatoRSourceGenerator
             Console.WriteLine(addCommandTemplate);
 
             File.WriteAllText($"{FilePath}/Add{DataModelName}Command.cs", addCommandTemplate);
+
+
+        }
+
+
+        public static void GenerateUpdateCommand(AppsettingDataModel appsettingDataModel,
+             string TheNameSpace, string DataModelName, string DataModelNamespace,
+             string DataModelClass, ref string ListOfProperties, bool ClaimsPrincipalIfTrue,
+             ref string ListOfParameters, ref string ListOfPropertiesEqualsTheParameters,
+             string FilePath
+            )
+        {
+
+
+
+            CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
+
+         
+
+
+            foreach (PropertyInfo property in countryDataModel.GetType().GetProperties())
+            {
+                var descricao = property;
+                var type = property.PropertyType.Name;
+                string typeName = "";
+
+                if (property.PropertyType == typeof(string))
+                {
+                    typeName = "string";
+                }
+                else if (property.PropertyType == typeof(bool))
+                {
+                    typeName = "bool";
+
+                }
+                else if (property.PropertyType == typeof(int))
+                {
+                    typeName = "int";
+
+                }
+                else if (property.PropertyType == typeof(double))
+                {
+                    typeName = "double";
+
+                }
+                else if (property.PropertyType == typeof(decimal))
+                {
+                    typeName = "decimal";
+
+                }
+                else if (property.PropertyType == typeof(float))
+                {
+                    typeName = "float";
+
+                }
+                else if (property.PropertyType == typeof(long))
+                {
+                    typeName = "long";
+
+                }
+                else if (property.PropertyType == typeof(char))
+                {
+                    typeName = "char";
+
+                }
+                else
+                {
+                    break;
+                }
+
+                updateListOfProperties(typeName, descricao.Name);
+                updateListOfParameters(countryDataModel, property, descricao.Name, typeName);
+                updateListOfPropertiesEqualsTheParameters(descricao.Name);
+
+            }
+
+            if (ClaimsPrincipalIfTrue)
+            {
+                ListOfProperties += "public ClaimsPrincipal ClaimsPrincipal { get; set; }\n";
+                ListOfParameters += $", ClaimsPrincipal claimsPrincipal  ";
+                ListOfPropertiesEqualsTheParameters += "this.ClaimsPrincipal = claimsPrincipal;\n";
+            }
+
+            string UpdateCommandTemplate = $@"
+            using System;
+            using CM.Library.DataModels.BusinessModels;
+            using MediatR;
+            using System.Security.Claims;
+            using {DataModelNamespace}
+
+            namespace {TheNameSpace}
+            {{
+    
+                    public class Update{DataModelName}Command : IRequest<{DataModelClass}>
+                    {{
+                        {ListOfProperties}
+        
+
+                        public Update{DataModelName}Command({ListOfParameters})
+                        {{
+                            {ListOfPropertiesEqualsTheParameters}
+
+                        }}
+                    }}
+    
+            }}
+
+                ";
+
+            Console.WriteLine(UpdateCommandTemplate);
+
+            File.WriteAllText($"{FilePath}/Update{DataModelName}Command.cs", UpdateCommandTemplate);
+
+
+        }
+
+        public static void GenerateDeleteCommand(AppsettingDataModel appsettingDataModel,
+             string TheNameSpace, string DataModelName, string DataModelNamespace,
+             string DataModelClass, ref string ListOfProperties, bool ClaimsPrincipalIfTrue,
+             ref string ListOfParameters, ref string ListOfPropertiesEqualsTheParameters,
+             string FilePath
+            )
+        {
+
+
+
+            CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
+
+
+
+
+            foreach (PropertyInfo property in countryDataModel.GetType().GetProperties())
+            {
+                var descricao = property;
+                var type = property.PropertyType.Name;
+                string typeName = "";
+
+                if (property.PropertyType == typeof(string))
+                {
+                    typeName = "string";
+                }
+                else if (property.PropertyType == typeof(bool))
+                {
+                    typeName = "bool";
+
+                }
+                else if (property.PropertyType == typeof(int))
+                {
+                    typeName = "int";
+
+                }
+                else if (property.PropertyType == typeof(double))
+                {
+                    typeName = "double";
+
+                }
+                else if (property.PropertyType == typeof(decimal))
+                {
+                    typeName = "decimal";
+
+                }
+                else if (property.PropertyType == typeof(float))
+                {
+                    typeName = "float";
+
+                }
+                else if (property.PropertyType == typeof(long))
+                {
+                    typeName = "long";
+
+                }
+                else if (property.PropertyType == typeof(char))
+                {
+                    typeName = "char";
+
+                }
+                else
+                {
+                    break;
+                }
+                if (descricao.Name.Equals("Id"))
+                {
+                    updateListOfProperties(typeName, descricao.Name);
+                    updateListOfParameters(countryDataModel, property, descricao.Name, typeName);
+                    updateListOfPropertiesEqualsTheParameters(descricao.Name);
+                }
+
+                
+
+            }
+
+            if (ClaimsPrincipalIfTrue)
+            {
+                ListOfProperties += "public ClaimsPrincipal ClaimsPrincipal { get; set; }\n";
+                ListOfParameters += $", ClaimsPrincipal claimsPrincipal  ";
+                ListOfPropertiesEqualsTheParameters += "this.ClaimsPrincipal = claimsPrincipal;\n";
+            }
+
+            string DeleteCommandTemplate = $@"
+            using System;
+            using CM.Library.DataModels.BusinessModels;
+            using MediatR;
+            using System.Security.Claims;
+            using {DataModelNamespace}
+
+            namespace {TheNameSpace}
+            {{
+    
+                    public class Delete{DataModelName}Command : IRequest<{DataModelClass}>
+                    {{
+                        {ListOfProperties}
+        
+
+                        public Delete{DataModelName}Command({ListOfParameters})
+                        {{
+                            {ListOfPropertiesEqualsTheParameters}
+
+                        }}
+                    }}
+    
+            }}
+
+                ";
+
+            Console.WriteLine(DeleteCommandTemplate);
+
+            File.WriteAllText($"{FilePath}/Delete{DataModelName}Command.cs", DeleteCommandTemplate);
 
 
         }
