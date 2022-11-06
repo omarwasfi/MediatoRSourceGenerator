@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1704.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediatoRSourceGenerator", "MediatoRSourceGenerator\MediatoRSourceGenerator.csproj", "{7A9A3CA9-C77D-4E41-87E1-42F09D059A1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CM.Library", "..\..\SkateMall\src\CM\Library\CM.Library.csproj", "{7E2A6626-95AE-4D83-8972-1CA2F50FBDCE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A9A3CA9-C77D-4E41-87E1-42F09D059A1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A9A3CA9-C77D-4E41-87E1-42F09D059A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A9A3CA9-C77D-4E41-87E1-42F09D059A1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A9A3CA9-C77D-4E41-87E1-42F09D059A1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E2A6626-95AE-4D83-8972-1CA2F50FBDCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E2A6626-95AE-4D83-8972-1CA2F50FBDCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E2A6626-95AE-4D83-8972-1CA2F50FBDCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E2A6626-95AE-4D83-8972-1CA2F50FBDCE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5E42EF4-AABE-4D4E-8D6E-1B65F03B1C4B}
+	EndGlobalSection
+EndGlobal
