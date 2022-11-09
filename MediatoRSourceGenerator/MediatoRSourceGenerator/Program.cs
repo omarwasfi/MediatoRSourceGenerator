@@ -1,7 +1,11 @@
 ﻿using System;
+using System.CodeDom.Compiler;
+using System.Data;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using Humanizer;
+using Microsoft.CSharp;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 
@@ -29,7 +33,6 @@ namespace MediatoRSourceGenerator
 
 
             AppsettingDataModel = new AppsettingDataModel();
-            AppsettingDataModel.ProjectPath = config["ProjectPath"];
             AppsettingDataModel.GenerateAddCommand = bool.Parse(config["GenerateAddCommand"]);
             AppsettingDataModel.GenerateAddCommandHandler = bool.Parse(config["GenerateAddCommandHandler"]);
             AppsettingDataModel.GenerateUpdateCommand = bool.Parse(config["GenerateUpdateCommand"]);
@@ -39,10 +42,15 @@ namespace MediatoRSourceGenerator
             AppsettingDataModel.GenerateDeleteCommandHandler = bool.Parse(config["GenerateDeleteCommandHandler"]);
             AppsettingDataModel.GenerateDeleteCommandValidator = bool.Parse(config["GenerateDeleteCommandValidator"]);
             AppsettingDataModel.AddClaimsPrincipal = bool.Parse(config["AddClaimsPrincipal"]);
-            AppsettingDataModel.DBContextClass = config["DBContextClass"];
+            AppsettingDataModel.TheEventsNameSpace = config["TheEventsNameSpace"];
+            AppsettingDataModel.TheQueriesNameSpace = config["TheQueriesNameSpace"];
             AppsettingDataModel.DataModelName = config["DataModelName"];
-            AppsettingDataModel.DataModelNameAtTheDBContext = config["DataModelNameAtTheDBContext"];
-
+            AppsettingDataModel.DataModelNamespace = config["DataModelNamespace"];
+            AppsettingDataModel.EventsFilePath = config["EventsFilePath"];
+            AppsettingDataModel.QueriesFilePath = config["QueriesFilePath"];
+            AppsettingDataModel.DataModelClass = config["DataModelClass"];
+            AppsettingDataModel.DataModelClassWithNamespace = config["DataModelClassWithNamespace"];
+            AppsettingDataModel.DBContextClass = config["DBContextClass"];
 
             int counter = 1;
             foreach (var property in AppsettingDataModel.GetType().GetProperties())
@@ -56,6 +64,7 @@ namespace MediatoRSourceGenerator
 
             }
 
+            object dataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
 
             ListOfParameters = "";
             ListOfProperties = "";
@@ -63,15 +72,16 @@ namespace MediatoRSourceGenerator
 
             GenerateAddCommand(
                 AppsettingDataModel,
-                TheNameSpace: "CM.Library.Events.Country",
-                DataModelName: "Country",
-                DataModelNamespace: "CM.Library.DataModels.MetaData;",
-                DataModelClass: "CountryDataModel",
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
                 ListOfProperties:ref ListOfProperties,
                 ClaimsPrincipalIfTrue: true,
                 ListOfParameters:ref ListOfParameters,
                 ListOfPropertiesEqualsTheParameters:ref ListOfPropertiesEqualsTheParameters,
-                "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country"
+                AppsettingDataModel.EventsFilePath,
+                 dataModel
                 );
 
 
@@ -82,15 +92,16 @@ namespace MediatoRSourceGenerator
 
             GenerateUpdateCommand(
             AppsettingDataModel,
-            TheNameSpace: "CM.Library.Events.Country",
-            DataModelName: "Country",
-            DataModelNamespace: "CM.Library.DataModels.MetaData;",
-            DataModelClass: "CountryDataModel",
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
             ListOfProperties: ref ListOfProperties,
             ClaimsPrincipalIfTrue: true,
             ListOfParameters: ref ListOfParameters,
             ListOfPropertiesEqualsTheParameters: ref ListOfPropertiesEqualsTheParameters,
-            "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country"
+                AppsettingDataModel.EventsFilePath,
+                dataModel
             );
 
             ListOfParameters = "";
@@ -98,109 +109,117 @@ namespace MediatoRSourceGenerator
             ListOfPropertiesEqualsTheParameters = "";
 
             GenerateDeleteCommand(
-            AppsettingDataModel,
-            TheNameSpace: "CM.Library.Events.Country",
-            DataModelName: "Country",
-            DataModelNamespace: "CM.Library.DataModels.MetaData;",
-            DataModelClass: "CountryDataModel",
+           AppsettingDataModel,
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
             ListOfProperties: ref ListOfProperties,
             ClaimsPrincipalIfTrue: true,
             ListOfParameters: ref ListOfParameters,
             ListOfPropertiesEqualsTheParameters: ref ListOfPropertiesEqualsTheParameters,
-            "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country"
+                AppsettingDataModel.EventsFilePath,
+                dataModel
             );
 
             ListOfMappingRequestToNewDatabaseModel = "";
 
             GenerateAddCommandHandler(
             AppsettingDataModel,
-            TheNameSpace: "CM.Library.Events.Country",
-            DataModelName: "Country",
-            DataModelNamespace: "CM.Library.DataModels.MetaData;",
-            DataModelClass: "CountryDataModel",
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
             ListOfMappingRequestToNewDatabaseModel: ref ListOfMappingRequestToNewDatabaseModel,
-            "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country"
+                AppsettingDataModel.EventsFilePath,
+                dataModel
             );
 
             GenerateAddCommandValidator(
-            AppsettingDataModel,
-            TheNameSpace: "CM.Library.Events.Country",
-            DataModelName: "Country",
-            DataModelNamespace: "CM.Library.DataModels.MetaData;",
-            DataModelClass: "CountryDataModel",
-            "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country");
+             AppsettingDataModel,
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
+                           AppsettingDataModel.EventsFilePath
+);
 
             ListOfMappingRequestToTheUpdatedDatabaseModel = "";
 
             GenerateUpdateCommandHandler(
                 AppsettingDataModel,
-                TheNameSpace: "CM.Library.Events.Country",
-                DataModelName: "Country",
-                DataModelNamespace: "CM.Library.DataModels.MetaData;",
-                DataModelClass: "CountryDataModel",
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
                 ListOfMappingRequestToTheUpdatedDatabaseModel: ref ListOfMappingRequestToTheUpdatedDatabaseModel,
-                "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country"
+                AppsettingDataModel.EventsFilePath,
+                dataModel
 );
 
             GenerateUpdateCommandValidator(
-               AppsettingDataModel,
-               TheNameSpace: "CM.Library.Events.Country",
-               DataModelName: "Country",
-               DataModelNamespace: "CM.Library.DataModels.MetaData;",
-               DataModelClass: "CountryDataModel",
-               "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country");
+                 AppsettingDataModel,
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
+                               AppsettingDataModel.EventsFilePath
+);
 
             GenerateDaleteCommandHandler(
-               AppsettingDataModel,
-               TheNameSpace: "CM.Library.Events.Country",
-               DataModelName: "Country",
-               DataModelNamespace: "CM.Library.DataModels.MetaData;",
-               DataModelClass: "CountryDataModel",
-               "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country");
+                AppsettingDataModel,
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
+                               AppsettingDataModel.EventsFilePath,
+                dataModel
+               );
 
 
             GenerateDeleteCommandValidator(
                AppsettingDataModel,
-               TheNameSpace: "CM.Library.Events.Country",
-               DataModelName: "Country",
-               DataModelNamespace: "CM.Library.DataModels.MetaData;",
-               DataModelClass: "CountryDataModel",
-               "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Events/Country");
+                AppsettingDataModel.TheEventsNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
+                               AppsettingDataModel.EventsFilePath
+               );
 
             GenerateGetByIdQuery(
-               AppsettingDataModel,
-               TheNameSpace: "CM.Library.Queries.Country",
-               DataModelName: "Country",
-               DataModelNamespace: "CM.Library.DataModels.MetaData;",
-               DataModelClass: "CountryDataModel",
-               "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Queries/Country");
+              AppsettingDataModel,
+                AppsettingDataModel.TheQueriesNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
+                               AppsettingDataModel.QueriesFilePath);
 
 
             GenerateGetQuery(
               AppsettingDataModel,
-              TheNameSpace: "CM.Library.Queries.Country",
-              DataModelName: "Country",
-              DataModelNamespace: "CM.Library.DataModels.MetaData;",
-              DataModelClass: "CountryDataModel",
-              "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Queries/Country");
+                AppsettingDataModel.TheQueriesNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
+                               AppsettingDataModel.QueriesFilePath);
 
 
             GenerateGetQueryHandler(
               AppsettingDataModel,
-              TheNameSpace: "CM.Library.Queries.Country",
-              DataModelName: "Country",
-              DataModelNamespace: "CM.Library.DataModels.MetaData;",
-              DataModelClass: "CountryDataModel",
-              "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Queries/Country");
+                AppsettingDataModel.TheQueriesNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
+                               AppsettingDataModel.QueriesFilePath);
 
 
             GenerateGetByIdQueryHandler(
-              AppsettingDataModel,
-              TheNameSpace: "CM.Library.Queries.Country",
-              DataModelName: "Country",
-              DataModelNamespace: "CM.Library.DataModels.MetaData;",
-              DataModelClass: "CountryDataModel",
-              "/Users/omarwasfi/Documents/GitHub/SkateMall/src/CM/Library/Queries/Country");
+               AppsettingDataModel,
+                AppsettingDataModel.TheQueriesNameSpace,
+                AppsettingDataModel.DataModelName,
+                AppsettingDataModel.DataModelNamespace,
+                AppsettingDataModel.DataModelClass,
+                               AppsettingDataModel.QueriesFilePath);
         }
 
 
@@ -211,12 +230,12 @@ namespace MediatoRSourceGenerator
         }
 
 
-        public static void updateListOfParameters(CM.Library.DataModels.MetaData.CountryDataModel countryDataModel, PropertyInfo property, string descricaoName, string typeName,bool skipCommaAtTheBegin = false)
+        public static void updateListOfParameters(object dataModel, PropertyInfo property, string descricaoName, string typeName,bool skipCommaAtTheBegin = false)
         {
             string destinationWord = descricaoName;
             destinationWord = string.Concat(destinationWord[0].ToString().ToLower(), destinationWord.AsSpan(1));
 
-            if (property == countryDataModel.GetType().GetProperties().First<PropertyInfo>() || skipCommaAtTheBegin)
+            if (property == dataModel.GetType().GetProperties().First<PropertyInfo>() || skipCommaAtTheBegin)
             {
                 ListOfParameters += $"{typeName} {destinationWord}";
             }
@@ -249,15 +268,16 @@ namespace MediatoRSourceGenerator
              string TheNameSpace, string DataModelName, string DataModelNamespace,
              string DataModelClass,ref string ListOfProperties, bool ClaimsPrincipalIfTrue,
              ref string ListOfParameters,ref  string ListOfPropertiesEqualsTheParameters,
-             string FilePath
+             string FilePath,
+             object dataModel
             )
         {
 
-            CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
+            //CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
 
             bool skipCommaAtTheBegin = true;
 
-            foreach (var property in countryDataModel.GetType().GetProperties())
+            foreach (var property in dataModel.GetType().GetProperties())
             {
                 var descricao = property;
                 var type = property.PropertyType.Name;
@@ -316,7 +336,7 @@ namespace MediatoRSourceGenerator
                 }
 
                 updateListOfProperties(typeName, descricao.Name);
-                updateListOfParameters(countryDataModel, property, descricao.Name, typeName, skipCommaAtTheBegin: skipCommaAtTheBegin);
+                updateListOfParameters(dataModel, property, descricao.Name, typeName, skipCommaAtTheBegin: skipCommaAtTheBegin);
                 skipCommaAtTheBegin = false;
                 updateListOfPropertiesEqualsTheParameters(descricao.Name);
 
@@ -367,18 +387,14 @@ namespace MediatoRSourceGenerator
              string TheNameSpace, string DataModelName, string DataModelNamespace,
              string DataModelClass, ref string ListOfProperties, bool ClaimsPrincipalIfTrue,
              ref string ListOfParameters, ref string ListOfPropertiesEqualsTheParameters,
-             string FilePath
+             string FilePath,
+              object  dataModel
             )
-        {
-
-
-
-            CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
-
+        { 
          
 
 
-            foreach (PropertyInfo property in countryDataModel.GetType().GetProperties())
+            foreach (PropertyInfo property in dataModel.GetType().GetProperties())
             {
                 var descricao = property;
                 var type = property.PropertyType.Name;
@@ -429,7 +445,7 @@ namespace MediatoRSourceGenerator
                 }
 
                 updateListOfProperties(typeName, descricao.Name);
-                updateListOfParameters(countryDataModel, property, descricao.Name, typeName);
+                updateListOfParameters(dataModel, property, descricao.Name, typeName);
                 updateListOfPropertiesEqualsTheParameters(descricao.Name);
 
             }
@@ -478,18 +494,14 @@ namespace MediatoRSourceGenerator
              string TheNameSpace, string DataModelName, string DataModelNamespace,
              string DataModelClass, ref string ListOfProperties, bool ClaimsPrincipalIfTrue,
              ref string ListOfParameters, ref string ListOfPropertiesEqualsTheParameters,
-             string FilePath
+             string FilePath,
+              object dataModel
             )
         {
 
 
 
-            CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
-
-
-
-
-            foreach (PropertyInfo property in countryDataModel.GetType().GetProperties())
+            foreach (PropertyInfo property in dataModel.GetType().GetProperties())
             {
                 var descricao = property;
                 var type = property.PropertyType.Name;
@@ -541,7 +553,7 @@ namespace MediatoRSourceGenerator
                 if (descricao.Name.Equals("Id"))
                 {
                     updateListOfProperties(typeName, descricao.Name);
-                    updateListOfParameters(countryDataModel, property, descricao.Name, typeName);
+                    updateListOfParameters(dataModel, property, descricao.Name, typeName);
                     updateListOfPropertiesEqualsTheParameters(descricao.Name);
                 }
 
@@ -594,18 +606,13 @@ namespace {TheNameSpace}
              string TheNameSpace, string DataModelName, string DataModelNamespace,
              string DataModelClass,
              ref string ListOfMappingRequestToNewDatabaseModel,
-             string FilePath
+             string FilePath,
+              object dataModel
             )
                 {
 
 
-
-                    CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
-
-
-
-
-                    foreach (PropertyInfo property in countryDataModel.GetType().GetProperties())
+                    foreach (PropertyInfo property in dataModel.GetType().GetProperties())
                     {
                         var descricao = property;
                         var type = property.PropertyType.Name;
@@ -807,18 +814,12 @@ namespace {TheNameSpace}
             string TheNameSpace, string DataModelName, string DataModelNamespace,
             string DataModelClass,
             ref string ListOfMappingRequestToTheUpdatedDatabaseModel,
-            string FilePath
+            string FilePath,
+              object dataModel
             )
                     {
 
-
-
-                        CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
-
-
-
-
-                        foreach (PropertyInfo property in countryDataModel.GetType().GetProperties())
+                        foreach (PropertyInfo property in dataModel.GetType().GetProperties())
                         {
                             var descricao = property;
                             var type = property.PropertyType.Name;
@@ -1036,18 +1037,13 @@ namespace {TheNameSpace}
         public static void GenerateDaleteCommandHandler(AppsettingDataModel appsettingDataModel,
             string TheNameSpace, string DataModelName, string DataModelNamespace,
             string DataModelClass,
-            string FilePath
+            string FilePath,
+              object dataModel
             )
                     {
 
 
-
-                        CM.Library.DataModels.MetaData.CountryDataModel countryDataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
-
-
-
-
-                        foreach (PropertyInfo property in countryDataModel.GetType().GetProperties())
+                        foreach (PropertyInfo property in dataModel.GetType().GetProperties())
                         {
                             var descricao = property;
                             var type = property.PropertyType.Name;
