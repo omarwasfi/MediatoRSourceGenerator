@@ -64,7 +64,7 @@ namespace MediatoRSourceGenerator
 
             }
 
-            object dataModel = new CM.Library.DataModels.MetaData.CountryDataModel();
+            object dataModel = new CM.Library.DataModels.SubscriptionDataModel();
 
             ListOfParameters = "";
             ListOfProperties = "";
@@ -441,7 +441,7 @@ namespace MediatoRSourceGenerator
                 }
                 else
                 {
-                    break;
+                    continue;
                 }
 
                 updateListOfProperties(typeName, descricao.Name);
@@ -548,7 +548,7 @@ namespace MediatoRSourceGenerator
                 }
                 else
                 {
-                    break;
+                    continue;
                 }
                 if (descricao.Name.Equals("Id"))
                 {
@@ -659,7 +659,7 @@ namespace {TheNameSpace}
                         }
                         else
                         {
-                            break;
+                            continue;
                         }
                         if (descricao.Name.Equals("Deleted"))
                         {
@@ -866,7 +866,7 @@ namespace {TheNameSpace}
                             }
                             else
                             {
-                                break;
+                                continue;
                             }
                             if (descricao.Name.Equals("Id"))
                             {
@@ -1090,7 +1090,7 @@ namespace {TheNameSpace}
                             }
                             else
                             {
-                                break;
+                                continue;
                             }
                             if (descricao.Name.Equals("Id"))
                             {
